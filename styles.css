@@ -1,0 +1,37 @@
+.chat-container {
+    width: 50%;
+    margin: auto;
+    padding: 20px;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.chat-header {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.chat-log {
+    height: 400px;
+    overflow-y: scroll;
+    margin-bottom: 10px;
+}
+
+.chat-bubble {
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.user-bubble {
+    background-color: #9bd1fa;
+    float: left;
+}
+
+.bot-bubble {
+    background-color: #d3d3d3;
+    float: right;
+}
+
