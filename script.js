@@ -1,28 +1,46 @@
-$(document).ready(function() {
-    $("#send-btn").click(function() {
-        sendMessage();
-    });
+// Seleccionamos los elementos HTML necesarios
+const userInput = document.querySelector('#userInput');
+const sendButton = document.querySelector('#sendButton');
+const conversation = document.querySelector('.conversation');
 
-    $('#user-input').keypress(function(event) {
-        if (event.keyCode === 13) {
-            sendMessage();
-        }
-    });
+// Función para agregar un mensaje a la conversación
+function addMessage(msg, className) {
+    const msgContainer = document.createElement('div');
+    msgContainer.classList.add('msg-container', className);
 
-    function sendMessage() {
-        var userInput = $('#user-input').val();
-        $('#user-input').val('');
-        $('#chat-log').append('<div class="chat-bubble user-bubble">' + userInput + '</div>');
-        $.ajax({
-            url: '/get',
-            type: 'GET',
-            data: {msg: userInput},
-            success: function(response) {
-                $('#chat-log').append('<div class="chat-bubble bot-bubble">' + response + '</div>');
-            },
-            error: function(error) {
-                console.log(error);
-            }
-        });
+    const msgElement = document.createElement('div');
+    msgElement.classList.add('msg');
+    msgElement.textContent = msg;
+
+    msgContainer.appendChild(msgElement);
+    conversation.appendChild(msgContainer);
+
+    conversation.scrollTop = conversation.scrollHeight;
+}
+
+// Evento para enviar un mensaje al bot
+sendButton.addEventListener('click', () => {
+    const userText = userInput.value.trim();
+
+    if (userText !== '') {
+        addMessage(userText, 'user');
+        userInput.value = '';
+
+        fetch(`/get?msg=${userText}`)
+            .then(response => response.text())
+            .then(botResponse => {
+                addMessage(botResponse, 'bot');
+            });
     }
 });
+
+// Evento para enviar un mensaje al bot al presionar Enter
+userInput.addEventListener('keydown', event => {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        sendButton.click();
+    }
+});
+
+// Mensaje de bienvenida del bot
+addMessage('Hola! Soy un bot. ¿En qué puedo ayudarte?', 'bot');
